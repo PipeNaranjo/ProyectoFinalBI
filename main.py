@@ -3,9 +3,13 @@ import requests
 import os
 import json
 import errno
+import boto3
+
 
 access_key = 'AKIAQK6GXBJHZ5GKSKVH'
 secret_access_key = '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'
+nombre_bucket = 'Desarrollo'
+
 
 url = 'https://pokeapi.co/api/v2/'
 dir = 'D:/PokeApi/'
@@ -29,9 +33,13 @@ for endpoint in endpoints:
     cantidad = respone.json()['count']
     res = requests.get(url2+'?limit='+str(cantidad)+'&offset=0')
     var = res.json()
-    with open(os.path.join(dir+endpoint+'/'+endpoint+'.json'),'w') as file:
-        json.dump(var,file)
+    s = json.dumps(var, indent=4)
+    f = open(dir+endpoint+'/'+endpoint+'.json', "w")
+    f.write(s)
+    f.close()
+    #client = boto3.client('s3', aws_access_key_id = access_key, aws_secret_access_key_id = secret_access_key)
 
+    #client.upload_file(dir+endpoint+'/'+endpoint+'.json',nombre_bucket,endpoint+'/'+endpoint+'.json')
     if endpoint == 'pokemon':
         for pokemon in var['results']:
             encounters = requests.get(url2+'/'+pokemon['name']+'/encounters')
@@ -41,8 +49,11 @@ for endpoint in endpoints:
             except OSError as e:
                 if e.errno != errno.EEXIST:
                     raise
-            with open(os.path.join(dir+endpoint+'/encounters/'+pokemon['name']+'.json'),'w') as file:
-                json.dump(en,file)
+            
+            s = json.dumps(en, indent=4)
+            f = open(dir+endpoint+'/encounters/'+pokemon['name']+'.json', "w")
+            f.write(s)
+            f.close()
 
 
 
