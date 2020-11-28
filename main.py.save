@@ -23,7 +23,6 @@ for endpoint in endpoints:
 	dir1 = dir+endpoint
 	url2= url+endpoint
 	respone = requests.get(url2)
-	print(respone.json())
 	cantidad = respone.json()['count']
 	res = requests.get(url2+'?limit='+str(cantidad)+'&offset=0')
 	var = res.json()
