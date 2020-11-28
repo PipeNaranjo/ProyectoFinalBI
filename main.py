@@ -6,13 +6,14 @@ import errno
 import boto3
 
 
-access_key = 'AKIAQK6GXBJHZ5GKSKVH'
-secret_access_key = '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'
-nombre_bucket = 'Desarrollo'
+access_key = 'AKIAUQYANRW63ENTI5F4'
+secret_access_key = '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'
+nombre_bucket = 'Pruebas'
+nombre_carpeta = 'Cargas'
 
 
 url = 'https://pokeapi.co/api/v2/'
-dir = 'D:/PokeApi/'
+dir = '/home/ubuntu/PokeApi/'
 #endpoints = ['berry', 'berry-firmness', 'berry-flavor','contest-type','contest-effect','super-contest-effect','encounter-method','encounter-condition','encounter-condition-value',
 #             'evolution-chain','evolution-trigger','generation','pokedex','version','version-group','item','item-category','item-fling-effect',
 #             'item-pocket','location','location-area','pal-park-area','region','machine','move','move-ailment','move-category','move-learn-method',
@@ -22,38 +23,28 @@ dir = 'D:/PokeApi/'
 endpoints = ['pokemon']
 
 for endpoint in endpoints:
-    url2= url+endpoint
-    respone = requests.get(url2)
-    try:
-        os.mkdir(dir+endpoint+'/')
-    except OSError as e:
-        if e.errno != errno.EEXIST:
-            raise
-
-    cantidad = respone.json()['count']
-    res = requests.get(url2+'?limit='+str(cantidad)+'&offset=0')
-    var = res.json()
-    s = json.dumps(var, indent=4)
-    f = open(dir+endpoint+'/'+endpoint+'.json', "w")
-    f.write(s)
-    f.close()
-    #client = boto3.client('s3', aws_access_key_id = access_key, aws_secret_access_key_id = secret_access_key)
-
-    #client.upload_file(dir+endpoint+'/'+endpoint+'.json',nombre_bucket,endpoint+'/'+endpoint+'.json')
-    if endpoint == 'pokemon':
-        for pokemon in var['results']:
-            encounters = requests.get(url2+'/'+pokemon['name']+'/encounters')
-            en = encounters.json()
-            try:
-                os.mkdir(dir+endpoint+'/encounters/')
-            except OSError as e:
-                if e.errno != errno.EEXIST:
-                    raise
-            
-            s = json.dumps(en, indent=4)
-            f = open(dir+endpoint+'/encounters/'+pokemon['name']+'.json', "w")
-            f.write(s)
-            f.close()
-
-
-
+	dir1 = dir+endpoint
+	url2= url+endpoint
+	respone = requests.get(url2)
+	cantidad = respone.json()['count']
+	res = requests.get(url2+'?limit='+str(cantidad)+'&offset=0')
+	var = res.json()
+	s = json.dumps(var, indent=4)
+	f = open(dir1+'.json', "w")
+	f.write(s)
+	f.close()
+	#client = boto3.client('s3', aws_access_key_id = access_key, aws_secret_access_key_id = secret_access_key)
+	#client.upload_file(dir1+'/'+endpoint+'.json',nombre_bucket,endpoint+'/'+endpoint+'.json')
+	if endpoint == 'pokemon':
+		for pokemon in var['results']:
+			encounters = requests.get(url2+'/'+pokemon['name']+'/encounters')
+			if os.path.isdir('/home/ubuntu/PokeApi/encounters/'):
+				os.system('/home/ubuntu/PokeApi/encounters/')
+			
+			en = encounters.json()
+			a = json.dumps(en, indent=4)
+			f = open(dir+'encounters/'+pokemon['name']+'-encounter.json', "w")
+			f.write(s)
+			f.close()
+			#client = boto3.client('s3', aws_access_key_id = access_key, aws_secret_access_key_id = secret_access_key)
+			#client.upload_file(dir1+'/encounters/'+pokemon['name']+'.json')
