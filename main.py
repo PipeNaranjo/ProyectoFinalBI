@@ -49,7 +49,7 @@ def cargarEncounters(pokemon,dir1,url2):
 	f = open(dir1 + '/encounters/' + pokemon['name'] + '-encounter.json', "w")
 	f.write(archivo)
 	f.close()
-	client.upload_file(dir1 + '/' + endpoint + '/encounters/' + pokemon['name'] + '-encounter.json', nombre_bucket, endpoint + '/encounters/' + pokemon['name'] + '-encounter.json')
+	client.upload_file(dir1 + '/encounters/' + pokemon['name'] + '-encounter.json', nombre_bucket, endpoint + '/encounters/' + pokemon['name'] + '-encounter.json')
 
 def verificarCategoria(categoria,lista):
 	for i in range(0,len(lista)):
