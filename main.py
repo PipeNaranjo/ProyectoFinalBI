@@ -7,8 +7,8 @@ import json
 import boto3
 
 
-access_key = 'AKIAUQYANRW63ENTI5F4'
-secret_access_key = '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'
+access_key = ''
+secret_access_key = ''
 nombre_bucket = 'bucket-limpio'
 
 client = boto3.client('s3', aws_access_key_id = access_key, aws_secret_access_key = secret_access_key)
