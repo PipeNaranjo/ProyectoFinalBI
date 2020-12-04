@@ -1,0 +1,29 @@
+import pymysql
+
+# Credenciales de coneccion a la base de datos
+endpoint = "database-4.c8lzpfvtrgz7.us-east-1.rds.amazonaws.com"
+username = "admin"
+password = "andres3098"
+database_name = "DataHouse"
+
+# Enlace a la BD
+connection = pymysql.connect(endpoint, username, password, database_name)
+
+cursor = connection.cursor()
+
+#cursor.execute("create table Persona ( id INT NOT NULL AUTO_INCREMENT, Name varchar(255) NOT NULL, PRIMARY KEY (id))")
+#cursor.execute("drop table Persona")
+cursor.execute('insert into Persona (Name) values("Sara")')
+
+cursor.execute('SELECT * from Persona')
+
+result = []
+rows = cursor.fetchall()
+for row in rows:
+    result.append(row)
+        
+cursor.close()
+
+def lambda_handler(event, context):
+        
+    return result
