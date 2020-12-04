@@ -1,0 +1,36 @@
+import json
+import boto3
+
+access_key  = 'AKIAUQYANRW6UDGMNJRF'
+secret_access_key = '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'
+
+client = boto3.client('s3', aws_access_key_id = access_key, aws_secret_access_key = secret_access_key)
+
+resultado = []
+
+def lambda_handler(event, context):
+     
+     items = ['item/healing.json', 'item/special-balls','item7standar-balls','item/status-cures']
+     for item in items:
+          response = client.get_object(Bucket='bucket-limpio', Key=item)
+          content= response['Body']
+          JsonDoc = json.loads(content.read())
+
+          for balls in JsonDoc['\''+item+'\'']:
+               arreglo = []
+               arreglo.append(balls['id'])
+               arreglo.append(balls['category']['name'])
+               arreglo.append(balls['name'])
+               arreglo.append(balls['effect_entries']['short-effect'])
+               aux =[]
+               for games in balls['games_indices']:
+                    aux.append(games['generation']['name'])
+               arreglo[aux]
+               aux = []
+          for attribute in balls['attributes']:
+                    aux.appedn(attribute['name'])
+               arreglo[aux]
+               
+          resultado.append(arreglo)
+     
+     return resultado
